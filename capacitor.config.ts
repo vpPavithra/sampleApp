@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'org.sunbird.app',
   appName: 'sampleApp',
   webDir: 'www',
   server: {
