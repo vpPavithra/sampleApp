@@ -49,12 +49,12 @@ import { Subscription } from 'rxjs';
 export class PlayerPage implements OnInit, OnDestroy, AfterViewInit {
 
   config: any;
-  backButtonSubscription: Subscription;
+  backButtonSubscription: any;
   // course: Course;
   pauseSubscription: any;
   // private navigateBackToContentDetails: boolean;
   // private navigateBackToTrackableCollection: boolean;
-  corRelationList;
+  corRelationList: any;
   private isCourse = false;
   playerConfig: any;
   // private isChildContent: boolean;
