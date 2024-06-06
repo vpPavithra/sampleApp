@@ -13,6 +13,10 @@ const routes: Routes = [
     path: 'epub-player',
     loadChildren: () => import('./epub-player/epub-player.module').then( m => m.EpubPlayerPageModule)
   },
+  {
+    path: 'ecml-player',
+    loadChildren: () => import('./ecml-player/ecml-player.module').then( m => m.EcmlPlayerPageModule)
+  },
 ];
 @NgModule({
   imports: [
