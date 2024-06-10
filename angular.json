@@ -34,6 +34,11 @@
                 "glob": "**/*.*",
                 "input": "./node_modules/@project-sunbird/sunbird-epub-player-web-component/assets",
                 "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "content-player",
+                "output": "content-player"
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss", 

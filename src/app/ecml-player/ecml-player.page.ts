@@ -1,21 +1,32 @@
 import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {ScreenOrientation } from '@capacitor/screen-orientation';
+import { Platform } from '@ionic/angular';
+import { PlayerActionHandlerDelegate, User } from './player-action-handler-delegate';
+import { CanvasPlayerService } from '../../services/canvas-player.service';
 
 @Component({
   selector: 'app-ecml-player',
   templateUrl: './ecml-player.page.html',
   styleUrls: ['./ecml-player.page.scss'],
 })
-export class EcmlPlayerPage implements OnInit, OnDestroy {
+export class EcmlPlayerPage implements OnInit, OnDestroy, PlayerActionHandlerDelegate {
   config: any;
-
+  pauseSubscription: any;
   @ViewChild('preview', { static: false }) previewElement!: ElementRef;
 
   constructor(
-    private location: Location
+    private location: Location,
+    private platform: Platform,
+    private canvasPlayerService: CanvasPlayerService
   ) { 
+    this.canvasPlayerService.handleAction();
+    // this.commonUtil.handleAction();
     (window as any).onContentNotFound = this.onContentNotFound.bind(this);
+    (window as any).onUserSwitch = this.onUserSwitch.bind(this);
+  }
+  onUserSwitch(user: User) {
+    console.log('Method not implemented.');
   }
 
   onContentNotFound(identifier: string, hierarchyInfo: Array<any>) {
@@ -203,7 +214,7 @@ export class EcmlPlayerPage implements OnInit, OnDestroy {
           },
           "isUpdateAvailable": false,
           "mimeType": "application/vnd.ekstep.ecml-archive",
-          "basePath": "/_app_file_/_app_file_/_app_file_/_app_file_/_app_file_",
+          "basePath": "/_app_file_",
           "contentType": "selfassess",
           "primaryCategory": "course assessment",
           "isAvailableLocally": false,
@@ -211,7 +222,14 @@ export class EcmlPlayerPage implements OnInit, OnDestroy {
           "sizeOnDevice": 0,
           "lastUsedTime": 0,
           "lastUpdatedTime": 0,
-          "contentAccess": [],
+          "contentAccess": [
+              {
+                  "status": 1,
+                  "contentId": "do_21361377887175475213059",
+                  "contentType": "selfassess",
+                  "contentLearnerState": {}
+              }
+          ],
           "contentFeedback": [],
           "contentMarker": [],
           "rollup": {
@@ -259,25 +277,13 @@ export class EcmlPlayerPage implements OnInit, OnDestroy {
           "objectRollup": {
               "l1": "do_21361377887175475213059"
           },
-          "sid": "342551c0-bfa7-4ac2-acf7-b31b7e08cbfa",
+          "sid": "d5e4f542-8227-46ff-9a4c-6e38588a76f9",
           "actor": {
               "type": "User",
               "id": "be2012e9-7fda-4053-b2e5-c9ba81c9514b"
           },
           "deeplinkBasePath": "",
           "cdata": [
-              {
-                  "id": "6e9c4a30-23d4-11ef-aff7-cdcd31ee28d6",
-                  "type": "API"
-              },
-              {
-                  "id": "SearchResult",
-                  "type": "Section"
-              },
-              {
-                  "id": "content-detail",
-                  "type": "ChildUi"
-              },
               {
                   "id": "teacher",
                   "type": "UserType"
@@ -287,12 +293,25 @@ export class EcmlPlayerPage implements OnInit, OnDestroy {
                   "type": "PlayerLaunch"
               }
           ],
+          "contentId": "do_21361377887175475213059",
           "channel": "505c7c48ac6dc1edc9b08f21db5a571d",
           "dispatcher": {}
       },
-      "data": {}
+      "appContext": {
+          "local": true,
+          "server": false,
+          "groupId": ""
+      },
+      "data": {},
+      "uid": "be2012e9-7fda-4053-b2e5-c9ba81c9514b"
   }
     this.config = obj;
+    this.pauseSubscription = this.platform.pause.subscribe(() => {
+      const iframes = window.document.getElementsByTagName('iframe');
+      if (iframes.length > 0) {
+        iframes[0].contentWindow.postMessage('pause.youtube', window.parent.origin);
+      }
+    });
   }
 
   async ngAfterViewInit() {
@@ -380,6 +399,9 @@ export class EcmlPlayerPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     ScreenOrientation.unlock();
     ScreenOrientation.lock({orientation: 'portrait'})
+    if (this.pauseSubscription) {
+      this.pauseSubscription.unsubscribe();
+    }
   }
 
   async closeIframe(content?: any) {

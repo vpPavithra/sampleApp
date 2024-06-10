@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EcmlPlayerPageRoutingModule } from './ecml-player-routing.module';
 
 import { EcmlPlayerPage } from './ecml-player.page';
+import { CanvasPlayerService } from 'src/services/canvas-player.service';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { EcmlPlayerPage } from './ecml-player.page';
     IonicModule,
     EcmlPlayerPageRoutingModule
   ],
-  declarations: [EcmlPlayerPage]
+  declarations: [EcmlPlayerPage],
+  providers: [CanvasPlayerService]
 })
 export class EcmlPlayerPageModule {}

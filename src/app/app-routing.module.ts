@@ -4,11 +4,8 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
-  { 
-    path: 'player', 
-    loadChildren: () => import('./player/player.module').then(m => m.PlayerPageModule) },
   {
     path: 'epub-player',
     loadChildren: () => import('./epub-player/epub-player.module').then( m => m.EpubPlayerPageModule)
@@ -17,10 +14,14 @@ const routes: Routes = [
     path: 'ecml-player',
     loadChildren: () => import('./ecml-player/ecml-player.module').then( m => m.EcmlPlayerPageModule)
   },
+  // { 
+  //   path: 'player', 
+  //   loadChildren: () => import('./player/player.module').then(m => m.PlayerPageModule) 
+  // },
 ];
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { })
   ],
   exports: [RouterModule]
 })

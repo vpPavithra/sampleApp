@@ -1,0 +1,1 @@
+export { CanvasPlayerService } from './canvas-player.service';
